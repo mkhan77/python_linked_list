@@ -1,13 +1,14 @@
 class Node:
-    def __init__(self, value, next = None) -> None:
+    def __init__(self, value, prev = None, next = None) -> None:
         self.value = value
         self.next = next
+        self.prev = prev
     
     def __repr__(self) -> str:
-        return f'{self.value}'
+        return f'Node: {self.value}'
 
 class LinkedList:
-    """ Class to implement a singly linked list """
+    """ Class to implement a doubly linked list """
 
     def __init__(self, head: Node) -> None:
         self.head = head
@@ -18,15 +19,18 @@ class LinkedList:
         while curr:
             li.append(curr.value)
             curr = curr.next
-        return ' -> '.join([str(i) for i in li])
+        return ' <-> '.join([str(i) for i in li])
 
     def add(self, value):
-        curr = self.head
-        while curr:
-            if curr.next == None:
-                curr.next = Node(value)
-                break
-            curr = curr.next
+        if self.head == None:
+            self.head = Node(value)
+        else:
+            curr = self.head
+            while curr:
+                if curr.next == None:
+                    curr.next = Node(value, prev=curr)
+                    break
+                curr = curr.next
     
     def values(self):
         curr = self.head
@@ -62,12 +66,14 @@ class LinkedList:
 
 if __name__ == '__main__':
     n3 = Node(3)
-    n2 = Node(2, n3)
-    n1 = Node(1, n2)
+    n2 = Node(2, next=n3)
+    n1 = Node(1, next=n2)
     linked_list = LinkedList(n1)
     linked_list.add(4)
+    print(linked_list)
     linked_list.add(5)
+    print('Added 5')
     print(linked_list.find(3))
-    print(linked_list.values())
     linked_list.delete(1)
-    print(linked_list.values())
+    print('Removed 1')
+    print(linked_list)
